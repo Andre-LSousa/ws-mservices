@@ -3,6 +3,7 @@ package io.github.cursomservice.msclient.application;
 import io.github.cursomservice.msclient.domain.Client;
 import io.github.cursomservice.msclient.infra.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,7 +13,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ClientService {
 
-    private final ClientRepository repository;
+    @Autowired
+    private ClientRepository repository;
 
     @Transactional
     public Client save(Client client){
