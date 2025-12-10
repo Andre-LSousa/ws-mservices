@@ -2,6 +2,7 @@ package io.github.cursomservice.msclient.application;
 
 import io.github.cursomservice.msclient.application.representation.ClientSaveRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import java.net.URI;
 @RestController
 @RequestMapping("/client")
 @RequiredArgsConstructor
+@Slf4j
 public class ClientResource {
 
     @Autowired
@@ -19,6 +21,7 @@ public class ClientResource {
 
     @GetMapping
     public String status(){
+        log.info("Obtendo o status do microservice de cliente");
         return "ok";
     }
 
