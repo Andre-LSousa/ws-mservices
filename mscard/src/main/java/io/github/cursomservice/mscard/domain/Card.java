@@ -22,7 +22,7 @@ public class Card {
     private BigDecimal income;
     private BigDecimal creditLimit;
 
-    public Card(String cardName, CardBrand brand, BigDecimal income, BigDecimal creditLimit) {
+    public Card(String name, CardBrand brand, BigDecimal income, BigDecimal creditLimit) {
         this.name = name;
         this.brand = brand;
         this.income = income;
