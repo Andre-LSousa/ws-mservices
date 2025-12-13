@@ -14,14 +14,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CardService {
 
-    private final CardRepository repository;
+    private final CardRepository cardRepository;
 
     @Transactional
     public Card save(Card card){
-        return repository.save(card);
+        return cardRepository.save(card);
     }
 
     public List<Card> getCardsIncomeLessEqual(BigDecimal income){
-        return repository.findByIncomeLessThanEqual(income);
+        return cardRepository.findByIncomeLessThanEqual(income);
     }
 }
