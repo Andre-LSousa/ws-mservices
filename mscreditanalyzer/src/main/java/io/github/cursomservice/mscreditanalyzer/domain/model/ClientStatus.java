@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class ClientStatus {
+
     private ClientData clientData;
     private List<ClientCard> clientCardList;
 
