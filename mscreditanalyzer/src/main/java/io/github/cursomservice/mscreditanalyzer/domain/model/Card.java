@@ -1,12 +1,14 @@
 package io.github.cursomservice.mscreditanalyzer.domain.model;
 
-import lombok.Data;
 import lombok.Getter;
 
-@Data
+import java.math.BigDecimal;
+
 @Getter
-public class ClientData {
+public class Card {
     private Long id;
     private String name;
-    private Integer age;
+    private String brand;
+    private BigDecimal creditLimit;
+
 }
