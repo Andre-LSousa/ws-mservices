@@ -58,21 +58,32 @@ public class CreditAnalyzerService {
             throws DataClientNotFoundException, ServiceCommunicationException{
         try {
             ResponseEntity<Optional<ClientData>> dataClientResponse = clientResourceClient.dataClient(cpf);
-            ResponseEntity<List<Card>> cardResponse = clientResourceCard.getCardsWithIncomeUpTo(income);
+
+            BigDecimal incomeBigDecimal = BigDecimal.valueOf(income);
+            ResponseEntity<List<Card>> cardResponse = clientResourceCard.getCardsWithIncomeUpTo(incomeBigDecimal);
 
             List<Card> cardList = cardResponse.getBody();
                 if (cardList == null) {
                 cardList = new ArrayList<>();
                 }
 
-            Optional<ClientData> clientData = dataClientResponse.getBody();
+            Optional<ClientData> clientDataOptional = dataClientResponse.getBody();
 
-            var approvedCardList = cardList.stream().map(card -> {
+            if (clientDataOptional == null || clientDataOptional.isEmpty()) {
+                throw new DataClientNotFoundException();
+            }
+
+            ClientData clientData = clientDataOptional.get();
+
+            var approvedCardList = cardList.stream().map( card-> {
 
                 BigDecimal creditLimit = card.getCreditLimit();
                 // BigDecimal bdIncome = BigDecimal.valueOf(income);
 
-                BigDecimal bdAge = BigDecimal.valueOf(clientData.getAge());
+                BigDecimal bdAge = clientData.getAge();
+                if (bdAge == null) {
+                    bdAge = BigDecimal.ZERO;
+                }
 
                 var ageFactor = bdAge.divide(BigDecimal.valueOf(10));
 
@@ -86,6 +97,7 @@ public class CreditAnalyzerService {
                 return cardApproved;
             }).collect(Collectors.toList());
             return new CustomerAssessmentResponse(approvedCardList);
+            //.orElseThrow(DataClientNotFoundException::new);
 
         }catch (FeignException.FeignClientException e){
             int status = e.status();
