@@ -1,6 +1,11 @@
 spring:
   application:
     name: mscreditanalyzer
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin123
 
 server:
   port: 0
@@ -13,3 +18,7 @@ eureka:
   instance:
     hostname: localhost
     instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+mq:
+  queues:
+    mscard_card_issuance: mscard_card_issuance
