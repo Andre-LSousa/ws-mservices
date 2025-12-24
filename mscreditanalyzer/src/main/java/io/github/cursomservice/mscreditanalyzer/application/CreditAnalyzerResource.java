@@ -1,10 +1,9 @@
 package io.github.cursomservice.mscreditanalyzer.application;
 
+import io.github.cursomservice.mscreditanalyzer.application.ex.CardRequestException;
 import io.github.cursomservice.mscreditanalyzer.application.ex.DataClientNotFoundException;
 import io.github.cursomservice.mscreditanalyzer.application.ex.ServiceCommunicationException;
-import io.github.cursomservice.mscreditanalyzer.domain.model.ClientStatus;
-import io.github.cursomservice.mscreditanalyzer.domain.model.CustomerAssessmentResponse;
-import io.github.cursomservice.mscreditanalyzer.domain.model.DataAssessment;
+import io.github.cursomservice.mscreditanalyzer.domain.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,7 @@ public class CreditAnalyzerResource {
     }
 
     @GetMapping(value = "client-status", params = "cpf")
-    public ResponseEntity<?> checkClientStatus(@RequestParam("cpf") String cpf){
+    public ResponseEntity checkClientStatus(@RequestParam("cpf") String cpf){
         try {
             ClientStatus clientStatus = creditAnalyzerService.getClientStatus(cpf);
             return ResponseEntity.ok(clientStatus);
@@ -60,8 +59,19 @@ public class CreditAnalyzerResource {
             return ResponseEntity.status(status).body(e.getMessage());
         }
 
+    }
+
+    @PostMapping("card-request")
+    public ResponseEntity cardRequest(@RequestBody CardIssuanceRequestData data){
+        try{
+            CardRequestProtocol cardRequestProtocol = creditAnalyzerService
+                    .issueCardRequest(data);
+            return ResponseEntity.ok(cardRequestProtocol);
+        }catch (CardRequestException e){
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
     }
+}
 
 
 

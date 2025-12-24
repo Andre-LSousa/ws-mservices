@@ -1,11 +1,13 @@
 package io.github.cursomservice.mscreditanalyzer.application;
 
 import feign.FeignException;
+import io.github.cursomservice.mscreditanalyzer.application.ex.CardRequestException;
 import io.github.cursomservice.mscreditanalyzer.application.ex.DataClientNotFoundException;
 import io.github.cursomservice.mscreditanalyzer.application.ex.ServiceCommunicationException;
 import io.github.cursomservice.mscreditanalyzer.domain.model.*;
 import io.github.cursomservice.mscreditanalyzer.infra.client.ClientResourceCard;
 import io.github.cursomservice.mscreditanalyzer.infra.client.ClientResourceClient;
+import io.github.cursomservice.mscreditanalyzer.infra.mqueue.CardIssuancePublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,8 +25,9 @@ import java.util.stream.Collectors;
 public class CreditAnalyzerService {
 
     private final ClientResourceClient clientResourceClient;
-
     private final ClientResourceCard clientResourceCard;
+    private final CardIssuancePublisher cardIssuancePublisher;
+
 
     public ClientStatus getClientStatus(String cpf)
             throws DataClientNotFoundException, ServiceCommunicationException {
@@ -105,6 +109,16 @@ public class CreditAnalyzerService {
                 throw new DataClientNotFoundException();
             }
             throw new ServiceCommunicationException(e.getMessage(), status);
+        }
+    }
+
+    public CardRequestProtocol issueCardRequest(CardIssuanceRequestData data){
+        try{
+            cardIssuancePublisher.cardRequest(data);
+            var protocol = UUID.randomUUID().toString();
+            return new CardRequestProtocol(protocol);
+        }catch(Exception e){
+            throw new CardRequestException(e.getMessage());
         }
     }
 
