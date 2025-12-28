@@ -8,12 +8,14 @@ import io.github.cursomservice.mscard.domain.CardIssuanceRequestData;
 import io.github.cursomservice.mscard.infra.repository.CardClientRepository;
 import io.github.cursomservice.mscard.infra.repository.CardRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class CardIssuanceSubscriber {
 
     private final CardRepository cardRepository;
@@ -35,7 +37,7 @@ public class CardIssuanceSubscriber {
             cardClientRepository.save(cardClient);
 
         }catch(JsonProcessingException e){
-            e.printStackTrace();
+            log.error("Erro ao receber solicitação de emissao de cartao: {} ", e.getMessage());
         }
     }
 }

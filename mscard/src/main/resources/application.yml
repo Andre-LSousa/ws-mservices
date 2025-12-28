@@ -22,3 +22,13 @@ eureka:
 mq:
   queues:
     mscard_card_issuance: mscard_card_issuance
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+logging:
+  file:
+    name: ./log/log-file.log
