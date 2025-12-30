@@ -66,11 +66,20 @@
         </dependency>
 
         <!-- Lombok (removido scope provided para compilação) -->
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
+        <!--
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.30</version>
+            <scope>provided</scope>
+        </dependency> -->
 
         <!-- Test -->
         <dependency>
@@ -104,6 +113,7 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
+                            <version>1.18.30</version>
                         </path>
                         <!-- Adicione este processador para Spring Boot 3 -->
                         <path>
